@@ -1,0 +1,11 @@
+## SPACE ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:89:+    
+## SPACE ## bin/crypt.d/.videkah/filelist/master:38:+#KhaosCrypt # old way of splitting up into modules. 
+
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:62:+#use Data::Dumper;print STDERR "\n##########################\nkarl dumper of  $file  =".Dumper ($json_struct); # TODO rm this line
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:87:+#    print STDERR "karl _parseConf_main  \n"; # TODO rm this line
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:88:+
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:89:+
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:97:+#    print STDERR "karl _parseConf_char_set  \n"; # TODO rm this line
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:98:+
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:106:+#    print STDERR "karl _parseConf_service_set  \n"; # TODO rm this line
+##  RM   ## bin/crypt.d/lib/Crypt/Khaos/Conf.pm:107:+

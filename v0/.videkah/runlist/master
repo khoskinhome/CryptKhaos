@@ -1,0 +1,13 @@
+
+clear;./proveCryptKhaos.bash
+
+./proveCryptKhaos.bash
+
+
+clear ; ./proveCryptKhaosConf.pm.bash
+./proveCryptKhaosConf.pm.bash
+
+clear;
+clear; # dont run nuffin !
+
+clear; ./find-all-files.pl >> ./.videkah/filelist/master;

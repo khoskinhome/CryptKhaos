@@ -1,0 +1,256 @@
+diff --git a/bin/crypt.d/.videkah/filelist/master b/bin/crypt.d/.videkah/filelist/master
+index 78f44eb..937f68c 100644
+--- a/bin/crypt.d/.videkah/filelist/master
++++ b/bin/crypt.d/.videkah/filelist/master
+@@ -1,30 +1,4 @@
+ 
+-
+-./bin/cryptf6-home.pl
+-./bin/cryptf6-work.pl
+-
+-./bin/cryptf6.pl
+-
+-./karlhacking.pl
+-
+-./lib/KhaosCrypt/Conf/NewLayout.pm
+-
+-./lib/KhaosCrypt/Chars.pm
+-
+-./lib/KhaosCrypt/ConfBase.pm
+-
+-
+-./bin/khaoscrypt-export-confs.pl
+-./lib/KhaosCrypt/Conf/ExportAll.pm
+-
+-
+-./lib/KhaosCrypt/Conf/Home.pm
+-./lib/KhaosCrypt/Conf/HomeShared.pm
+-./lib/KhaosCrypt/Conf/Work.pm
+-
+-
+-
+-
+ ################################
+ Crypt::Khaos
+ 
+@@ -38,15 +12,20 @@ proveCryptKhaos.bash
+ 
+ 
+ proveCryptKhaosConf.pm.bash
++
+ ./lib/Crypt/Khaos/Conf.pm
++
++./bin/crypt-khaos-dump-example-confs.pl
++./lib/Crypt/Khaos/Conf/ExampleDumps.pm
++
+ ./t/testclass_crypt_khaos_conf.t
+ ./t/lib/TestClass/Crypt/Khaos/Conf.pm
+ 
+ 
++
++
+ ./lib/Crypt/Khaos/Utils.pm
+ 
+-./bin/crypt-khaos-dump-example-confs.pl
+-./lib/Crypt/Khaos/Conf/ExampleDumps.pm
+ 
+ ./lib/Crypt/Khaos.pm
+ ./lib/Crypt/Khaos/CharacterSymbolic.pm
+@@ -55,4 +34,32 @@ proveCryptKhaosConf.pm.bash
+ ./lib/Crypt/Khaos/Encode.pm
+ ./lib/Crypt/Khaos/Output.pm
+ 
++#################################
++#KhaosCrypt # old way of splitting up into modules. 
++
++
++./bin/cryptf6-home.pl
++./bin/cryptf6-work.pl
++
++./bin/cryptf6.pl
++
++./karlhacking.pl
++
++./lib/KhaosCrypt/Conf/NewLayout.pm
++
++./lib/KhaosCrypt/Chars.pm
++
++./lib/KhaosCrypt/ConfBase.pm
++
++
++./bin/khaoscrypt-export-confs.pl
++./lib/KhaosCrypt/Conf/ExportAll.pm
++
++
++./lib/KhaosCrypt/Conf/Home.pm
++./lib/KhaosCrypt/Conf/HomeShared.pm
++./lib/KhaosCrypt/Conf/Work.pm
++
++
++
+ 
+diff --git a/bin/crypt.d/.videkah/runlist/master b/bin/crypt.d/.videkah/runlist/master
+index e69de29..c0e038a 100644
+--- a/bin/crypt.d/.videkah/runlist/master
++++ b/bin/crypt.d/.videkah/runlist/master
+@@ -0,0 +1,8 @@
++
++clear;./proveCryptKhaos.bash
++
++./proveCryptKhaos.bash
++
++
++clear ; ./proveCryptKhaosConf.pm.bash
++./proveCryptKhaosConf.pm.bash
+diff --git a/bin/crypt.d/lib/Crypt/Khaos/Conf.pm b/bin/crypt.d/lib/Crypt/Khaos/Conf.pm
+index 2dc860f..bc8acda 100644
+--- a/bin/crypt.d/lib/Crypt/Khaos/Conf.pm
++++ b/bin/crypt.d/lib/Crypt/Khaos/Conf.pm
+@@ -7,7 +7,8 @@ use Crypt::Khaos::Utils;
+ use File::Slurp;
+ 
+ my $all_conf = {
+-    main         => {},
++    readInConf_run   => 0,   # boolean that indicates if readInConf has run.
++    main         => undef,
+     char_sets    => {},
+     service_sets => {},
+ };
+@@ -38,7 +39,12 @@ and fill up the conf-data-structure.
+ 
+ sub readInConf {
+ 
+-    my ( $class ) = @_;
++    my ( $class, $force ) = @_;
++
++    if ( ! $force && $all_conf->{readInConf_run} ){
++        return;
++    }
++    $all_conf->{readInConf_run} = 1;
+ 
+     ## return $dir."/examples"; ## TODO remove the examples bit from this.
+     my $confDir = getConfDir()."/examples/";
+@@ -53,7 +59,7 @@ sub readInConf {
+             my $json_text = read_file( $abs_file ) ;
+ 
+             my $json_struct = JSON->new->utf8->decode($json_text);
+-use Data::Dumper;print STDERR "\n##########################\nkarl dumper of  $file  =".Dumper ($json_struct); # TODO rm this line
++#use Data::Dumper;print STDERR "\n##########################\nkarl dumper of  $file  =".Dumper ($json_struct); # TODO rm this line
+ 
+             # dispatch to a sub dependent on the type of config
+ 
+@@ -77,24 +83,49 @@ use Data::Dumper;print STDERR "\n##########################\nkarl dumper of  $fi
+ 
+ sub _parseConf_main {
+     # TODO write this
++    my ($class, $json_struct) = @_;
++#    print STDERR "karl _parseConf_main  \n"; # TODO rm this line
++
++    
++    $all_conf->{main} = $json_struct;
+ 
+-   print STDERR "karl _parseConf_main  \n"; # TODO rm this li ne 
+ }
+ 
+ sub _parseConf_char_set {
+     # TODO write this
+-   print STDERR "karl _parseConf_char_set  \n"; # TODO rm this li ne 
++    my ($class, $json_struct) = @_;
++#    print STDERR "karl _parseConf_char_set  \n"; # TODO rm this line
++
++    $all_conf->{char_sets}{$json_struct->{name}} = $json_struct;
++
+ }
+ 
+ sub _parseConf_service_set {
+     # TODO write this
+-   print STDERR "karl _parseConf_service_set  \n"; # TODO rm this li ne 
++    my ($class, $json_struct) = @_;
++#    print STDERR "karl _parseConf_service_set  \n"; # TODO rm this line
++
++    $all_conf->{service_sets}{$json_struct->{name}} = $json_struct;
+ }
+ 
++=item getServiceSets
++
+ 
++=cut
++
++sub getServiceSets {
+ 
++    my ($class) = @_;
++    $class->readInConf if ( ! $all_conf->{readInConf_run} );
+ 
+ 
++}
++
++
++
++sub get_all_conf {
++    return $all_conf;
++}
+ 
+ 
+ =pod
+diff --git a/bin/crypt.d/t/lib/TestClass/Crypt/Khaos/Conf.pm b/bin/crypt.d/t/lib/TestClass/Crypt/Khaos/Conf.pm
+index 11cf001..cd7666e 100644
+--- a/bin/crypt.d/t/lib/TestClass/Crypt/Khaos/Conf.pm
++++ b/bin/crypt.d/t/lib/TestClass/Crypt/Khaos/Conf.pm
+@@ -1,6 +1,8 @@
+ package TestClass::Crypt::Khaos::Conf;
+ use strict;
+ 
++# also tests the Crypt::Khaos::Conf::ExampleDumps
++
+ use base qw( Test::Class );
+ 
+ use Test::More;
+@@ -10,6 +12,8 @@ use Data::Dumper;
+ 
+ BEGIN {
+     require Crypt::Khaos::Conf;
++    require Crypt::Khaos::Conf::ExampleDumps;
++
+ }
+ 
+ 
+@@ -27,6 +31,11 @@ sub test_getConfDir : Test(no_plan) {
+     my ($self) = @_;
+     ok ( 1 );
+ 
++    is ( Crypt::Khaos::Conf->getConfDir , "$tmp_test_crypt_khaos/conf" );
++
++    delete $ENV{CRYPT_KHAOS_CONF_DIR};
++
++    is ( Crypt::Khaos::Conf->getConfDir , "$ENV{HOME}/.cryptkhaos/conf" );
+ 
+     diag ( "finished test_getConfDir\n" );
+ };
+@@ -35,7 +44,17 @@ sub test_readInConf : Test(no_plan) {
+     my ($self) = @_;
+     ok ( 1 );
+ 
+-    diag ( "finished test_readInConf\n" );
++    is ( Crypt::Khaos::Conf->getConfDir , "$tmp_test_crypt_khaos/conf" );
++
++    # first use the Crypt::Khaos::Conf::ExampleDumps
++    Crypt::Khaos::Conf::ExampleDumps->dump();
++
++    Crypt::Khaos::Conf->readInConf();
++
++
++
++
++    #diag ( "finished test_readInConf\n" );
+ };
+ 
+ 
+@@ -46,7 +65,7 @@ sub test_check_config_with_good_config : Test(no_plan) {
+ 
+     ok (  1 );
+ 
+-    diag ( "finished test_check_config_with_good_config\n" );
++    #diag ( "finished test_check_config_with_good_config\n" );
+ }
+ 
+ 
