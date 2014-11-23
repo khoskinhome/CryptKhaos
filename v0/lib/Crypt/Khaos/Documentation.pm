@@ -1,12 +1,83 @@
 package Crypt::Khaos::Documentation;
 
+
+
+=head Crypt::Khaos
+
+Password Generator
+
+
+Crypt::Khaos is a password generator, that uses several different pieces of
+information to generate massively different passwords for different services
+using the same "salt", "passphrase" , "service-name", and optional USB held
+number generator. 
+
+The user commits to their memory potentially just one "salt" and "passphrase",
+and then with an additional "service-name" ( and a few other possible settings )
+generates a very difficult to crack passphrase.
+
+So the primary weakness of this system, is if a hacker, has this program,
+has your config files to this program, access to your usb-stick, and can key-log you.
+If they have all of these well then your XXXXed.
+
+However if a hacker, gets the hashing table of say a web-service, and then brute
+force attacks it ( nothing this generator ever looks like a dictionary word ),
+even if they do crack your passphrase, the rest of your webservices and logins will
+be using completely different generated passphrases.
+
+
+At the core of this program the passphrase is generated Crypt::PBKDF2
+and a call to   Crypt::PBKDF2->PBKDF2_hex( $salt, $phrase.$service.$external_usb.$addonifcheckbuiltfails );
+
+So the user typed in salt and phrase added on to the service-name, external_usb
+create wildy different passwords for different service-names.
+
+
+Q. So do I have just one user typed in salt and passphrase ?
+
+A. Well you can if you want, but you can also have different groupings of services, known as service-sets.
+i.e you might have a "home" service-set , a "work" service-set and these could have different 
+salt-phrase pairs.
+
+
+Q. How does the program know which service-set I wish to use ?
+
+A. There is a feature called "signatures", where a service-name added your salt-phrase pair generates 
+a generated-passphrase. The last 2 or maybe 3 characters of this generated passphrase are put in the
+service-set config file, and when you come along and type your salt-phrase pair, this generated passphrase
+is created and if the last 2 maybe 3 characters match the "signature", then the program calculates
+that is the service-set you wish to use.
+
+This obviously gives an attacker a route into brute forcing your salt-phrase pair, so if you want
+you don't have to have the signature in a service-set config, but then the program will have to display
+these service-sets all the time because it will have no way of knowing that you have typed the correct
+salt-passphrase .
+
+
+
+that will generate service-passphrase for one salt-phrase pair, and
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=cut 
+
 =pod
 
 # environment variable
 
     $CRYPT_KHAOS_CONF_DIR which if not set will default to $HOME/.cryptkhaos/conf
 
-    $CRYPT_KHAOS_DIR which will do , I dunno what.
 
 all the config files will be encoded in JSON,
 and the filename suffix will be .json
