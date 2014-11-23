@@ -16,8 +16,6 @@ use Clipboard;
 
 ## TODO , maybe  call it Crypt::Khaos::CLI , need to look at cpan for sensible module names.
 
-use lib "$ENV{CRYPT_KHAOS_LIB}";
-
 use KhaosCrypt::ConfBase;
 
 # the returnpushedtimeout is only used in the loop when

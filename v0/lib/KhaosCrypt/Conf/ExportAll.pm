@@ -37,7 +37,7 @@ sub export {
 
     my $exportdir = Crypt::Khaos::Conf->getConfDir()."/export";
 
-    print "\n\nmkdir -p $exportdir\n\n";
+    print "\nmkdir -p $exportdir\n";
     system( "mkdir -p $exportdir");
 
     my $json = JSON->new->allow_nonref;
@@ -61,7 +61,7 @@ sub export {
     for my $char_set_suffix ( qw/AllChars Google ThreeEx AlphaNumericOnly/ ){
 
         my $char_set = "KhaosCrypt::Chars::$char_set_suffix";
-        print "\nExport $char_set\n";
+        print "Export $char_set : ";
 
         my $char_set_rh;
         {
@@ -78,13 +78,12 @@ sub export {
         for my $char_name ( keys %$char_set_rh ){
             $json_rh->{chars}{$char_name} = $char_set_rh->{$char_name}[1];
         }
-        print "\n";
 
         $hashref2char_set_suffix_map->{"$char_set_rh"} = lc($char_set_suffix);
 
         my $json_text = $json->pretty->encode( $json_rh );
         my $filename = $exportdir."/".lc($char_set_suffix).".char_set.json";
-        print "dumping $char_set_rh char_set $char_set_suffix TO $filename\n\n";
+        print " dumping $char_set_rh char_set $char_set_suffix TO $filename\n";
         write_file($filename, \$json_text);
 
     }
@@ -93,7 +92,7 @@ sub export {
     print "###############\nExport the service_sets \n";
     for my $cfpackage_suffix ( qw/Home HomeShared Work/ ) {
         my $cfpackage = "KhaosCrypt::Conf::$cfpackage_suffix";
-        print "\nExport conf package = $cfpackage\n";
+        print "Export conf package = $cfpackage : ";
         # package KhaosCrypt::Conf::Home;
         # MAXLENGTH
         # SERVICES
@@ -157,14 +156,11 @@ sub export {
             };
 
         }
-        print "\n";
-
 
         my $json_text = $json->pretty->encode( $json_rh );
         my $filename = $exportdir."/$lc_cfpackage.service_set.json";
-        print "dumping service_set $lc_cfpackage TO $filename\n\n";
+        print " dumping service_set $lc_cfpackage TO $filename\n";
         write_file($filename, \$json_text);
-
     }
 
 }

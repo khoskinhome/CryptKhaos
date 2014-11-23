@@ -1,13 +1,31 @@
 
-clear;./proveCryptKhaos.bash
+reset ;./proveCryptKhaos.bash
 
 ./proveCryptKhaos.bash
 
 
-clear ; ./proveCryptKhaosConf.pm.bash
+reset ; ./proveCryptKhaosConf.pm.bash
 ./proveCryptKhaosConf.pm.bash
 
 clear;
 clear; # dont run nuffin !
 
-clear; ./find-all-files.pl >> ./.videkah/filelist/master;
+
+perl -I $HOME/github.com/CryptKhaos/v0/lib ./bin/cryptf6.pl
+
+
+reset; perl -I $HOME/github.com/CryptKhaos/v0/lib ./bin/cryptf6.pl
+reset; perl -I $HOME/github.com/CryptKhaos/v0/lib ./bin/crypt-khaos-dump-example-confs.pl
+reset; perl -I $HOME/github.com/CryptKhaos/v0/lib ./bin/khaoscrypt-export-confs.pl
+reset; perl -I $HOME/github.com/CryptKhaos/v0/lib ./bin/cktest.pl
+
+
+
+
+
+
+###### clear; ./find-all-files.pl >> ./.videkah/filelist/master;
+
+# reset
+
+

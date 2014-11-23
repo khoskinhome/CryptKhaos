@@ -1,7 +1,7 @@
+crap
 
 
 ################################
-## Sat Nov 22 13:30:53 GMT 2014
 ./ignore.txt
 ./proveCryptKhaos.bash
 ./README
@@ -13,7 +13,11 @@
 ./find-all-files.pl
 ./lib/Crypt/Khaos.pm
 ./lib/Crypt/Khaos/Documentation.pm
+
+
 ./lib/Crypt/Khaos/Conf.pm
+./t/lib/TestClass/Crypt/Khaos/Conf.pm
+
 ./lib/Crypt/Khaos/Encode.pm
 ./lib/Crypt/Khaos/Output.pm
 ./lib/Crypt/Khaos/CharacterSymbolic.pm
@@ -35,15 +39,18 @@
 ./t/00-load.t
 ./t/testclass_crypt_khaos_conf.t
 ./t/manifest.t
-./t/lib/TestClass/Crypt/Khaos/Conf.pm
 ./t/pod-coverage.t
 ./t/boilerplate.t
 ./t/proveAllTestClasses.t
+
 
 ./bin/cryptf6.pl
 ./bin/crypt-khaos-dump-example-confs.pl
 ./bin/khaoscrypt-export-confs.pl
 ./bin/cktest.pl
+
+addlib2perl5lib.sh
+
 
 ################################
 
