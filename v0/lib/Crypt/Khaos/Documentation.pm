@@ -4,45 +4,64 @@ package Crypt::Khaos::Documentation;
 
 =head Crypt::Khaos
 
-Password Generator
+(Q). What is Crypt::Khaos ?
+
+(A). Crypt::Khaos is a password generator, that uses several different pieces of
+information to generate very different passwords for different services.
+
+The primary pieces of information it uses are a user typed "salt" and
+user typed "passphrase" that are used different "service-names".
+
+So the user just remembers one (or more) salt-and-passphrase pair and
+can then generate unique strong passphrases for different "services".
+
+A "service" can be a web-site , or password protected command line too.
+
+Crypt::Khaos has a configuration system that allows for lots of services.
+
+Servics are grouped into "service-sets" ( you have to have at least one
+service-set ), where usually a "service-set" would share the same
+salt-and-passphrase pair. Usually different service-sets
+would have different salt-and-passphrase pairs ( although they don't have to )
+
+The idea behind service-sets, is that you want to group say "home" services
+together , and "work" services together, and you probably want different
+salt-and-passphrase-pairs for each of them.
 
 
-Crypt::Khaos is a password generator, that uses several different pieces of
-information to generate massively different passwords for different services
-using the same "salt", "passphrase" , "service-name", and optional USB held
-number generator. 
 
-The user commits to their memory potentially just one "salt" and "passphrase",
-and then with an additional "service-name" ( and a few other possible settings )
-generates a very difficult to crack passphrase.
+(Q). How secure is it ?
 
-So the primary weakness of this system, is if a hacker, has this program,
+(A) The primary weakness of this system, is if a hacker, has this program,
 has your config files to this program, access to your usb-stick, and can key-log you.
-If they have all of these well then your XXXXed.
+If they have all of these well then your XXXXed, because they will be able to
+generate your passphrases. Mind you even if you weren't using Crypt::Khaos
+you'd be XXXXed with the forementioned scenario.
 
-However if a hacker, gets the hashing table of say a web-service, and then brute
-force attacks it ( nothing this generator ever looks like a dictionary word ),
+Where this system is strong, is say a hacker, gets the hashing table of a web-service,
+and then brute force attacks it ( nothing this generator ever looks like a dictionary word ),
 even if they do crack your passphrase, the rest of your webservices and logins will
-be using completely different generated passphrases.
+be using completely different generated passphrases. They will only have access
+to one web-service.
 
 
-At the core of this program the passphrase is generated Crypt::PBKDF2
-and a call to   Crypt::PBKDF2->PBKDF2_hex( $salt, $phrase.$service.$external_usb.$addonifcheckbuiltfails );
+(Q). What does Crypt::Khaos use to generate the unique passphrases ?
 
-So the user typed in salt and phrase added on to the service-name, external_usb
-create wildy different passwords for different service-names.
+(A). At the core of this program the passphrase is generated Crypt::PBKDF2,
+and this uses the salt-and-passphrase joined with the service-name and a few other
+bits-and-bobs to generate very long hard to brute force passphrases.
 
 
-Q. So do I have just one user typed in salt and passphrase ?
+(Q). So do I have just one user typed in salt and passphrase ?
 
-A. Well you can if you want, but you can also have different groupings of services, known as service-sets.
-i.e you might have a "home" service-set , a "work" service-set and these could have different 
+(A). Well you can if you want, but you can also have different groupings of services, known as service-sets.
+i.e you might have a "home" service-set , a "work" service-set and these could have different
 salt-phrase pairs.
 
 
-Q. How does the program know which service-set I wish to use ?
+(Q). How does the program know which service-set I wish to use ?
 
-A. There is a feature called "signatures", where a service-name added your salt-phrase pair generates 
+(A). There is a feature called "signatures", where a service-name added your salt-phrase pair generates
 a generated-passphrase. The last 2 or maybe 3 characters of this generated passphrase are put in the
 service-set config file, and when you come along and type your salt-phrase pair, this generated passphrase
 is created and if the last 2 maybe 3 characters match the "signature", then the program calculates
