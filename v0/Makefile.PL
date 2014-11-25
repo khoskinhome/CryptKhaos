@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME             => 'Crypt::Khaos',
-    AUTHOR           => q{Khaos <khaos@khoskin.co.uk>},
+    AUTHOR           => q{Khaos <cpan@khoskin.co.uk>},
     VERSION_FROM     => 'lib/Crypt/Khaos.pm',
     ABSTRACT_FROM    => 'lib/Crypt/Khaos.pm',
     LICENSE          => 'Artistic_2_0',
